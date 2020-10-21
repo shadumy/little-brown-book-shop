@@ -1,20 +1,40 @@
 package handler
 
-func calcDiscount(bookList []book) int {
+func calcDiscountPercentage(bookList []book) int {
 	hpID := []string{"9781408855652", "9781408855669", "9781408855676",
 		"9781408855683", "9781408855690", "9781408855706", "9781408855713"}
 	hpCheck := []string{}
+
 	for _, book := range bookList {
 		if stringInSlice(book.Id, hpID) {
 			hpCheck = append(hpCheck, book.Id)
 		}
 	}
 	hpCheck = uniqueSlice(hpCheck)
-	if len(hpCheck) > 6 {
-		return 15
+	discountRate := []int{0, 0, 10, 11, 12, 13, 14, 15}
+	discount := 0
+	if len(hpCheck) < 8 {
+		discount = discountRate[len(hpCheck)]
+	} else {
+		discount = 15
 	}
-	return 0
+	return discount
 
+}
+
+func calcNetDiscount(bookList []book) int {
+	discount := calcDiscountPercentage(bookList)
+	hpID := []string{"9781408855652", "9781408855669", "9781408855676",
+		"9781408855683", "9781408855690", "9781408855706", "9781408855713"}
+	var withDiscount int
+	for _, book := range bookList {
+		if stringInSlice(book.Id, hpID) {
+			withDiscount = withDiscount + book.Price
+			hpID = removeEleSlice(book.Id, hpID)
+		}
+	}
+	netDiscount := withDiscount * discount / 100
+	return int(netDiscount)
 }
 
 func stringInSlice(a string, list []string) bool {
@@ -36,4 +56,13 @@ func uniqueSlice(strSlice []string) []string {
 		}
 	}
 	return list
+}
+
+func removeEleSlice(item string, l []string) []string {
+	for i, other := range l {
+		if other == item {
+			return append(l[:i], l[i+1:]...)
+		}
+	}
+	return l
 }
