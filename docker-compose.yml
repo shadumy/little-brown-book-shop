@@ -3,7 +3,16 @@ version: "2"
 services:
   app:
     image: golang:1.15-alpine
+    container_name: little-brown-api
+    restart: always
     volumes:
       - .:/go/src/go-with-compose
     working_dir: /go/src/go-with-compose
     command: go run main.go
+    ports:
+      - 9567:9567
+
+networks:
+  default:
+    external:
+      name: docker_network
