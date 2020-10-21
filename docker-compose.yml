@@ -2,7 +2,7 @@ version: "2"
 
 services:
   app:
-    image: golang:1.15-alpine
+    image: golang:1.15
     container_name: little-brown-api
     restart: always
     volumes:
