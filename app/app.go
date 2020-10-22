@@ -1,31 +1,52 @@
 package app
 
 import (
+	"fmt"
 	"go-with-compose/app/handler"
+	"go-with-compose/app/model"
+	"go-with-compose/config"
+	"go-with-compose/gorm"
 	"go-with-compose/mux"
+	"log"
+
 	"net/http"
 )
 
 type App struct {
 	Router *mux.Router
+	DB     *gorm.DB
 }
 
 // Initialize initializes the app with predefined configuration
-func (a *App) Initialize() {
+func (a *App) Initialize(config *config.Config) {
+	dbURI := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
+		config.DB.Username,
+		config.DB.Password,
+		config.DB.Host,
+		config.DB.Port,
+		config.DB.Name,
+	)
+
+	db, err := gorm.Open(config.DB.Dialect, dbURI)
+	if err != nil {
+		log.Fatal("Could not connect database")
+	}
+
+	a.DB = model.DBMigrate(db)
 	a.Router = mux.NewRouter()
 	a.setRouters()
 }
 
 func (a *App) handleRequest(handler RequestHandlerFunction) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		handler(w, r)
+		handler(a.DB, w, r)
 	}
 }
 
 // setRouters sets the all required routers
 func (a *App) setRouters() {
 	a.Get("/", a.handleRequest(handler.HomePage))
-	a.Get("/getAddress", a.handleRequest(handler.GetAllBooks))
+	a.Get("/listall", a.handleRequest(handler.GetAllBooks))
 	a.Post("/discount", a.handleRequest(handler.GetDiscount))
 }
 
@@ -55,4 +76,4 @@ func (a *App) Run(host string) {
 	http.ListenAndServe(host, a.Router)
 }
 
-type RequestHandlerFunction func(w http.ResponseWriter, r *http.Request)
+type RequestHandlerFunction func(db *gorm.DB, w http.ResponseWriter, r *http.Request)

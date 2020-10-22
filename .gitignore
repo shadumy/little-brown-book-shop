@@ -151,3 +151,4 @@ Temporary Items
 # End of https://www.toptal.com/developers/gitignore/api/go,macos,vscode,intellij+all
 
 problem.txt
+.env

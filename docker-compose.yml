@@ -12,6 +12,24 @@ services:
     ports:
       - 9567:9567
 
+  db:
+    image: mysql:8.0.17
+    container_name: little-brown-api_db
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./local-db_cfg_custom.cnf:/etc/mysql/conf.d/db_cfg_custom.cnf
+    ports:
+      - ${DB_HOST_PORT}:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+    security_opt:
+      - seccomp:unconfined
+    logging:
+      options:
+        max-size: 50m
+
 networks:
   default:
     external:
