@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -16,10 +17,12 @@ type product struct {
 	Books []book `json:"books"`
 }
 
+// HomePage is the first Page
 func HomePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Welcome to the Little Brown Book Shop!")
 }
 
+// GetAllBooks is get list of all available book
 func GetAllBooks(w http.ResponseWriter, r *http.Request) {
 	book1 := book{
 		Cover: "https://d1w7fb2mkkr3kw.cloudfront.net/assets/images/book/mid/9781/4088/9781408855652.jpg",
@@ -208,4 +211,24 @@ func GetAllBooks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondJSON(w, http.StatusOK, shop)
+}
+
+// GetDiscount is for calculate discount
+func GetDiscount(w http.ResponseWriter, r *http.Request) {
+
+	var result map[string][]book
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&result); err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	defer r.Body.Close()
+
+	bookList := result["books"]
+	net := calcNetDiscount(bookList)
+	res := make(map[string]int)
+	res["discount"] = net
+	respondJSON(w, http.StatusOK, res)
+
 }

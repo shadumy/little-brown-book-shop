@@ -58,11 +58,11 @@ func uniqueSlice(strSlice []string) []string {
 	return list
 }
 
-func removeEleSlice(item string, l []string) []string {
-	for i, other := range l {
+func removeEleSlice(item string, list []string) []string {
+	for i, other := range list {
 		if other == item {
-			return append(l[:i], l[i+1:]...)
+			return append(list[:i], list[i+1:]...)
 		}
 	}
-	return l
+	return list
 }

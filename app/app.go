@@ -26,7 +26,7 @@ func (a *App) handleRequest(handler RequestHandlerFunction) http.HandlerFunc {
 func (a *App) setRouters() {
 	a.Get("/", a.handleRequest(handler.HomePage))
 	a.Get("/getAddress", a.handleRequest(handler.GetAllBooks))
-	// a.Post("/discount", a.handlerRequest(handler.Discount))
+	a.Post("/discount", a.handleRequest(handler.GetDiscount))
 }
 
 // Get wraps the router for GET method
