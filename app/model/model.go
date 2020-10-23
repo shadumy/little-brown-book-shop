@@ -3,17 +3,13 @@ package model
 import (
 	"go-with-compose/gorm"
 	_ "go-with-compose/gorm/dialects/mysql"
-	"time"
 )
 
 type Book struct {
-	Id        string `gorm:"unique;PRIMARY_KEY" json:"id"`
-	Cover     string `gorm:"default:null" json:"cover"`
-	Price     int    `json:"price" json:"price"`
-	Title     string `gorm:"default:null" json:"title"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
+	Id    string `gorm:"unique;PRIMARY_KEY" json:"id"`
+	Cover string `gorm:"default:null" json:"cover"`
+	Price int    `json:"price" json:"price"`
+	Title string `gorm:"default:null" json:"title"`
 }
 
 // DBMigrate will create and migrate the tables, and then make the some relationships if necessary

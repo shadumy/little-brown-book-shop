@@ -46,7 +46,11 @@ func (a *App) handleRequest(handler RequestHandlerFunction) http.HandlerFunc {
 // setRouters sets the all required routers
 func (a *App) setRouters() {
 	a.Get("/", a.handleRequest(handler.HomePage))
-	a.Get("/listall", a.handleRequest(handler.GetAllBooks))
+	a.Get("/books", a.handleRequest(handler.GetAllBooks))
+	a.Post("/books", a.handleRequest(handler.CreateBook))
+	a.Get("/books/{id}", a.handleRequest(handler.GetBook))
+	a.Put("/books/{id}", a.handleRequest(handler.UpdateBook))
+	a.Delete("/books/{id}", a.handleRequest(handler.DeleteBook))
 	a.Post("/discount", a.handleRequest(handler.GetDiscount))
 }
 
