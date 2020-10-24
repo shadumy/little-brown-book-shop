@@ -2,8 +2,13 @@ package handler
 
 import (
 	"encoding/json"
+	"go-with-compose/config"
 	"net/http"
 )
+
+var jwtKey []byte = config.GetConfig().Auth.Jwtkey
+var systemUser string = config.GetConfig().Auth.Username
+var systemPassword string = config.GetConfig().Auth.Password
 
 // respondJSON makes the response with payload as json format
 func respondJSON(w http.ResponseWriter, status int, payload interface{}) {

@@ -1,5 +1,11 @@
 package handler
 
+import (
+	jwt "go-with-compose/jwt-go"
+	"net/http"
+	"strings"
+)
+
 func calcDiscountPercentage(bookList []book) int {
 	hpID := []string{"9781408855652", "9781408855669", "9781408855676",
 		"9781408855683", "9781408855690", "9781408855706", "9781408855713"}
@@ -65,4 +71,33 @@ func removeEleSlice(item string, list []string) []string {
 		}
 	}
 	return list
+}
+
+func jwtAuthenVerification(reqToken string) (int, string) {
+
+	if reqToken == "" {
+		return http.StatusUnauthorized, "Request need Authorization with token in header"
+	}
+	splitToken := strings.Split(reqToken, "Bearer ")
+	if len(splitToken) != 2 && splitToken[0] != "Bearer " {
+		return http.StatusUnauthorized, "Request need Authorization with token in format: Bearer {token}"
+	}
+	reqToken = splitToken[1]
+
+	claims := &Claims{}
+
+	tkn, err := jwt.ParseWithClaims(reqToken, claims, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+
+	if err != nil {
+		if err == jwt.ErrSignatureInvalid {
+			return http.StatusUnauthorized, err.Error()
+		}
+		return http.StatusBadRequest, err.Error()
+	}
+	if !tkn.Valid {
+		return http.StatusUnauthorized, "Invalid Signature"
+	}
+	return http.StatusOK, ""
 }

@@ -239,3 +239,24 @@ func TestDiscountHP7(t *testing.T) {
 	}
 
 }
+
+func testJWTEmptyStr(t *testing.T) {
+	status, _ := jwtAuthenVerification("")
+	if status != 401 {
+		t.Error("Empty String should return 401 but got", status)
+	}
+}
+
+func testJWTNoBearer(t *testing.T) {
+	status, _ := jwtAuthenVerification("xxx yyy")
+	if status != 401 {
+		t.Error("Empty String should return 401 but got", status)
+	}
+}
+
+func testJWTWithBearerWrongOrder(t *testing.T) {
+	status, _ := jwtAuthenVerification("xxx Bearer ")
+	if status != 401 {
+		t.Error("String with Bearer but wrong order should return 401 but got", status)
+	}
+}

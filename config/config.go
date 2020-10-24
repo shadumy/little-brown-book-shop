@@ -1,7 +1,8 @@
 package config
 
 type Config struct {
-	DB *DBConfig
+	DB   *DBConfig
+	Auth *AuthReqConfig
 }
 
 type DBConfig struct {
@@ -13,6 +14,12 @@ type DBConfig struct {
 	Name     string
 }
 
+type AuthReqConfig struct {
+	Username string
+	Password string
+	Jwtkey   []byte
+}
+
 func GetConfig() *Config {
 	return &Config{
 		DB: &DBConfig{
@@ -22,6 +29,11 @@ func GetConfig() *Config {
 			Username: "root",
 			Password: "12345",
 			Name:     "mainDb",
+		},
+		Auth: &AuthReqConfig{
+			Username: "user1",
+			Password: "password",
+			Jwtkey:   []byte("my_secret_key"),
 		},
 	}
 }

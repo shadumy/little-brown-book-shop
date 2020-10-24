@@ -52,6 +52,7 @@ func (a *App) setRouters() {
 	a.Put("/books/{id}", a.handleRequest(handler.UpdateBook))
 	a.Delete("/books/{id}", a.handleRequest(handler.DeleteBook))
 	a.Post("/discount", a.handleRequest(handler.GetDiscount))
+	a.Post("/token", a.handleRequest(handler.RequestToken))
 }
 
 // Get wraps the router for GET method
