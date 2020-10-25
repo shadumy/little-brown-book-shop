@@ -161,3 +161,16 @@ Each book (book1, book2 ,....) has to be in format :
 ```
 
 For current version, system does not check other fields except id and price to calculate a discount. User can let cover and title as an empty string
+
+# Run on remote server
+
+Project has been deployed on server public ip: 209.97.167.166:9567
+
+You can run with the same command with the local machine. To request token, please using username and password below.
+
+```
+username: user1
+password: password
+```
+
+Remote server are running until 31 Oct 2020.
