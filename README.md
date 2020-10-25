@@ -166,7 +166,7 @@ For current version, system does not check other fields except id and price to c
 
 Project has been deployed on server public ip: 209.97.167.166:9567
 
-You can run with the same command with the local machine. To request token, please using username and password below.
+You can run with the same command with the local machine, hust change localhost:9567 to 209.97.167.166:9567. To request token, please using username and password below.
 
 ```
 username: user1
